@@ -4,6 +4,7 @@ import confetti from "canvas-confetti"
 import { TURNS } from "./components/constants.js"
 import { checkWinnerFrom } from "./logic/board.js"
 import { WinnerModal } from "./components/WinnerModal.jsx"
+import { resetGameStorage, saveGameStorage } from "./logic/storage/index.js"
 
 function App() {
   const [turn, setTurn] = useState(TURNS.X)
@@ -14,6 +15,8 @@ function App() {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
+
+    resetGameStorage()
   }
 
   const checkEndGame = (newBoard) => {
@@ -29,6 +32,11 @@ function App() {
 
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
+
+    saveGameStorage({
+      board: newBoard,
+      turn: newTurn
+    })
 
     const newWinner = checkWinnerFrom(newBoard)
     if(newWinner) {
